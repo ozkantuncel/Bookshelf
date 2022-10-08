@@ -4,6 +4,8 @@ plugins {
     id 'kotlin-kapt'
     id 'dagger.hilt.android.plugin'
     id 'com.google.gms.google-services'
+    id 'com.google.firebase.crashlytics'
+
 }
 
 android {
@@ -93,7 +95,5 @@ dependencies {
     implementation 'com.google.firebase:firebase-database-ktx:20.0.6'
     implementation 'com.google.firebase:firebase-firestore-ktx:24.3.1'
     implementation 'com.google.firebase:firebase-storage-ktx:20.0.2'
-    implementation("com.google.firebase:firebase-crashlytics-ktx")
-     implementation("com.google.firebase:firebase-perf-ktx")
-    implementation("com.google.firebase:firebase-messaging-ktx")
-}
+    implementation("com.google.firebase:firebase-crashlytics-ktx:18.2.13")
+    implementation 'com.google.firebase:firebase-messaging-ktx:23.0.8'}
