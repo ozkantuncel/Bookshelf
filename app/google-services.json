@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1047270841196",
+    "project_id": "bookshelf-b87da",
+    "storage_bucket": "bookshelf-b87da.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1047270841196:android:cbf85a14fe99ba7c29f149",
+        "android_client_info": {
+          "package_name": "com.ozkan.bookshelf"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1047270841196-5jbf709jfapgdhbqffhr9785d8lnftgh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDkV01GaIrSdWLPGhzgb7CJjAPaIZu_ryA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1047270841196-5jbf709jfapgdhbqffhr9785d8lnftgh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
