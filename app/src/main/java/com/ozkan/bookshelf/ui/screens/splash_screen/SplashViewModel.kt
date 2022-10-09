@@ -7,11 +7,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ozkan.bookshelf.data.repository.DataStoreRepository
 import com.ozkan.bookshelf.ui.navigation.Screen
-import kotlinx.coroutines.InternalCoroutinesApi
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.collect
+ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
- class SplashViewModel   : ViewModel() {
+ class SplashViewModel @Inject constructor(
+     private val repository: DataStoreRepository
+ )
+ : ViewModel() {
 
     private val _isLoading: MutableState<Boolean> = mutableStateOf(true)
     val isLoading: State<Boolean> = _isLoading
@@ -19,10 +22,16 @@ import javax.inject.Inject
     private val _startDestination: MutableState<String> = mutableStateOf(Screen.Welcome.route)
     val startDestination: State<String> = _startDestination
 
-    /*init {
-        viewModelScope.launch {
-            _startDestination.value = Screen.Home.route
-            _isLoading.value = false
-        }
-    }*/
+    init {
+         viewModelScope.launch {
+             repository.readOnBoardingState().collect { completed ->
+                 if (completed) {
+                     _startDestination.value = Screen.Home.route
+                 } else {
+                     _startDestination.value = Screen.Welcome.route
+                 }
+             }
+             _isLoading.value = false
+         }
+     }
 }
