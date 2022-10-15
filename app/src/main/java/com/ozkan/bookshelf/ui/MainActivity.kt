@@ -18,7 +18,7 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.ozkan.bookshelf.ui.navigation.NavGraph
 import com.ozkan.bookshelf.ui.screens.splash_screen.SplashViewModel
 import com.ozkan.bookshelf.ui.theme.BookshelfTheme
-import dagger.hilt.android.AndroidEntryPoint
+ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @ExperimentalAnimationApi

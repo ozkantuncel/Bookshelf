@@ -6,14 +6,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.ozkan.bookshelf.ui.theme.BookshelfTheme
 
 @Composable
-fun HomePage(name: String) {
-    Text(text = "Hello $name!")
+fun HomePage() {
+
 }
 
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
     BookshelfTheme {
-        HomePage("Android")
+        HomePage()
     }
 }

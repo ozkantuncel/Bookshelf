@@ -5,3 +5,7 @@ object FirebaseStorageConstants {
     val BOOK_IMAGES = "book"
     val BOOK_INFOS = "bookinfo"
 }
+
+object FirebaseFireStoreConstants {
+    const val USERS = "USERS"
+}
