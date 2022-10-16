@@ -37,4 +37,6 @@ class RegisterViewModel @Inject constructor(
     fun checkEmailPasswordNameState(email: String, password: String, nameSurname: String): Boolean {
         return !(email.isEmpty() || password.isEmpty() || nameSurname.isEmpty())
     }
+
+
 }

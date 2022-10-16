@@ -1,5 +1,6 @@
 package com.ozkan.bookshelf.firebase.repository
 
+import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
@@ -154,7 +155,10 @@ class AuthRepositoryImpl(
     }
 
     override fun logout(result: () -> Unit) {
-        TODO("Not yet implemented")
+        auth.signOut()
+        Prefs.setUserSession(null)
+        Prefs.setRememberMeState(false)
+        result.invoke()
     }
 
     override fun getSession(result: (User?) -> Unit) {

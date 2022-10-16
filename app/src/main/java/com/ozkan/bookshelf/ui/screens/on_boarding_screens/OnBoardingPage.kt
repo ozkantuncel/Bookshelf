@@ -39,6 +39,7 @@ import com.google.accompanist.pager.HorizontalPagerIndicator
 import com.google.accompanist.pager.PagerState
 import com.google.accompanist.pager.rememberPagerState
 import com.ozkan.bookshelf.ui.navigation.Screen
+import com.ozkan.bookshelf.ui.screens.common.button.BTKFinishButton
 import com.ozkan.bookshelf.ui.theme.Navyblue
 import com.ozkan.bookshelf.ui.theme.WhiteGry
 import com.ozkan.bookshelf.ui.util.OnBoarding
@@ -137,7 +138,7 @@ fun Pager(
                     fontSize = 16.sp,
 
                     )
-                FinishButton(
+                BTKFinishButton(
                     modifier = Modifier,
                     pagerState = pagerState
                 ) {
@@ -154,34 +155,3 @@ fun Pager(
     }
 }
 
-@ExperimentalAnimationApi
-@ExperimentalPagerApi
-@Composable
-fun FinishButton(
-    modifier: Modifier,
-    pagerState: PagerState,
-    onClick: () -> Unit
-) {
-    Row(
-        modifier = modifier
-            .padding(horizontal = 55.dp),
-        verticalAlignment = Alignment.Top,
-        horizontalArrangement = Arrangement.Center
-    ) {
-        AnimatedVisibility(
-            modifier = Modifier.fillMaxWidth(),
-            visible = pagerState.currentPage == 2
-        ) {
-            Button(
-                onClick = onClick,
-                colors = ButtonDefaults.buttonColors(
-                    contentColor = Color.White,
-                    backgroundColor = Navyblue
-                ),
-                shape = RoundedCornerShape(50)
-            ) {
-                Text(text = "Geç")
-            }
-        }
-    }
-}

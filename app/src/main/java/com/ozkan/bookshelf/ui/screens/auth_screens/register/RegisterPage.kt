@@ -1,22 +1,28 @@
 package com.ozkan.bookshelf.ui.screens.auth_screens.register
 
 
-import android.util.Log
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.Icon
 import androidx.compose.material.OutlinedTextField
+import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TextFieldDefaults
+import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
@@ -25,27 +31,34 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.google.accompanist.pager.ExperimentalPagerApi
-import com.google.accompanist.pager.PagerState
+import com.ozkan.bookshelf.R
 import com.ozkan.bookshelf.firebase.util.UiState
 import com.ozkan.bookshelf.ui.navigation.Screen
 import com.ozkan.bookshelf.ui.screens.api_state.ApiLoadingState
+import com.ozkan.bookshelf.ui.screens.common.button.BKAIconButton
+import com.ozkan.bookshelf.ui.screens.common.button.FinishButton
+import com.ozkan.bookshelf.ui.screens.common.button.BTKFinishButton
+import com.ozkan.bookshelf.ui.screens.common.button.BTKLoginButton
 import com.ozkan.bookshelf.ui.theme.AppBlue
-import com.ozkan.bookshelf.ui.theme.Navyblue
 
 
 @Composable
 fun RegisterPage(
     navController: NavController,
     viewModel: RegisterViewModel = hiltViewModel()
-
 ) {
     val registerState = viewModel.registerState.value
     val errorDialogState = remember { mutableStateOf(false) }
@@ -54,27 +67,20 @@ fun RegisterPage(
     when (registerState) {
         is UiState.Loading -> {
             ApiLoadingState()
-
         }
         is UiState.Failure -> {
             registerState.error?.let {
                 errorTitle.value = it
                 errorDialogState.value = true
-
             }
         }
         is UiState.Success -> {
 
-
-            LaunchedEffect(true){
+            LaunchedEffect(true) {
                 navController.popBackStack()
                 navController.navigate(Screen.Home.route)
-
-
             }
-
         }
-
         is UiState.Empty -> {}
     }
 
@@ -82,7 +88,6 @@ fun RegisterPage(
         viewModel = viewModel,
         errorDialogState = errorDialogState,
         errorTitle = errorTitle.value
-
     )
 
 }
@@ -98,143 +103,215 @@ fun RegisterPage(
     val password = remember { mutableStateOf("") }
     val passwordVisible = remember { mutableStateOf(false) }
 
-    Column(
-        modifier = Modifier
-            .padding(horizontal = 40.dp, vertical = 20.dp)
-            .fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(
-            text = "Kayıt Ol",
-            fontSize = 35.sp,
-            textAlign = TextAlign.Center
-        )
-        print("print ic")
-        Spacer(modifier = Modifier.height(42.dp))
+    Scaffold(
+        backgroundColor = Color.White,
+        topBar = {
+            TopAppBar(
+                title = {},
+                backgroundColor = Color.Transparent,
+                elevation = 0.dp,
+                navigationIcon = {
+                    BKAIconButton(
+                        modifier = Modifier,
+                        iconModifier = Modifier.size(35.dp),
+                        icon = R.drawable.left_ico,
+                        iconTint = Color.Gray
+                    ) {
+                        //Eklenecek
+                    }
+                })
+        },
+        content = {
+            Column(
+                modifier = Modifier
+                    .padding(horizontal = 35.dp, vertical = 10.dp)
+                    .fillMaxSize(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
 
-        OutlinedTextField(
-            textStyle = TextStyle(textAlign = TextAlign.Start),
-            value = userNameSurname.value,
-            onValueChange = {
-                userNameSurname.value = it
-            },
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(50.dp),
-            shape = RoundedCornerShape(12.dp),
-            singleLine = true,
-            colors = TextFieldDefaults.outlinedTextFieldColors(
-                focusedBorderColor = AppBlue,
-                cursorColor = AppBlue
-            ),
-            placeholder = {
-                Text(
-                    text = "İsim ve Soyisim",
-                    fontSize = 10.sp
-                )
-            },
-            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next)
-        )
 
-        Spacer(modifier = Modifier.height(42.dp))
+                Image(
+                    modifier = Modifier
+                        .fillMaxWidth(1f)
+                        .fillMaxHeight(0.35f),
+                    painter = painterResource(id = R.drawable.signup),
+                    contentDescription = null,
+                    )
 
-        OutlinedTextField(
-            textStyle = TextStyle(textAlign = TextAlign.Start),
-            value = userEmail.value,
-            onValueChange = {
-                userEmail.value = it
-            },
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(50.dp),
-            shape = RoundedCornerShape(12.dp),
-            singleLine = true,
-            colors = TextFieldDefaults.outlinedTextFieldColors(
-                focusedBorderColor = AppBlue,
-                cursorColor = AppBlue
-            ),
-            placeholder = {
-                Text(
-                    text = "Email",
-                    fontSize = 10.sp
-                )
-            },
-            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next)
-        )
-        Spacer(modifier = Modifier.height(42.dp))
+                Spacer(modifier = Modifier.height(25.dp))
 
-        OutlinedTextField(
-            textStyle = TextStyle(textAlign = TextAlign.Start),
-            value = password.value,
-            onValueChange = {
-                password.value = it
-            },
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(50.dp),
-            shape = RoundedCornerShape(12.dp),
-            singleLine = true,
-            colors = TextFieldDefaults.outlinedTextFieldColors(
-                focusedBorderColor = AppBlue,
-                cursorColor = AppBlue
-            ),
-            placeholder = {
-                Text(
-                    text = "Password",
-                    fontSize = 10.sp
-                )
-            },
-            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next)
-        )
-        FinishButton(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(50.dp),
-            text = "Kaydol"
-        ) {
-            if(viewModel.checkEmailPasswordNameState(
-                    email = userEmail.value,
-                    password = password.value,
-                    nameSurname = userNameSurname.value
-            )){
-                viewModel.register(
-                    email = userEmail.value,
-                    password = password.value,
-                    nameSurname = userNameSurname.value
-                )
-            }else {
-                //no op
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Start
+                ) {
+                    Text(
+                        text = "Kayıt Ol",
+                        color = Color.Black,
+                        fontSize = 30.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(25.dp))
+
+                Row(modifier = Modifier.fillMaxWidth()) {
+
+                    Icon(
+                        modifier = Modifier
+                            .size(40.dp)
+                            .align(Alignment.CenterVertically),
+                        painter = painterResource(id = R.drawable.pers_ico),
+                        contentDescription = null
+                    )
+                    OutlinedTextField(
+                        textStyle = TextStyle(textAlign = TextAlign.Start),
+                        value = userNameSurname.value,
+                        onValueChange = {
+                            userNameSurname.value = it
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(50.dp),
+                        shape = RoundedCornerShape(10.dp),
+                        singleLine = true,
+                        colors = TextFieldDefaults.outlinedTextFieldColors(
+                            focusedBorderColor = AppBlue,
+                            cursorColor = AppBlue
+                        ),
+                        placeholder = {
+                            Text(
+                                text = "Kulanıcı İsmi",
+                                fontSize = 15.sp
+                            )
+                        },
+                        keyboardOptions = KeyboardOptions(
+                            imeAction = ImeAction.Next,
+                            keyboardType = KeyboardType.Text
+                        )
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(25.dp))
+
+                Row(modifier = Modifier.fillMaxWidth()) {
+                    Icon(
+                        modifier = Modifier
+                            .size(40.dp)
+                            .align(Alignment.CenterVertically),
+                        painter = painterResource(id = R.drawable.at_ico),
+                        contentDescription = null
+                    )
+
+                    OutlinedTextField(
+                        textStyle = TextStyle(textAlign = TextAlign.Start),
+                        value = userEmail.value,
+                        onValueChange = {
+                            userEmail.value = it
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(50.dp),
+                        shape = RoundedCornerShape(10.dp),
+                        singleLine = true,
+                        colors = TextFieldDefaults.outlinedTextFieldColors(
+                            focusedBorderColor = AppBlue,
+                            cursorColor = AppBlue
+                        ),
+                        placeholder = {
+                            Text(
+                                text = "Mail Adresi",
+                                fontSize = 15.sp
+                            )
+                        },
+                        keyboardOptions = KeyboardOptions(
+                            imeAction = ImeAction.Next,
+                            keyboardType = KeyboardType.Email
+                        )
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(25.dp))
+
+                Row(modifier = Modifier.fillMaxWidth()) {
+                    Icon(
+                        modifier = Modifier
+                            .size(40.dp)
+                            .align(Alignment.CenterVertically),
+                        painter = painterResource(id = R.drawable.pass_ico),
+                        contentDescription = null
+                    )
+
+                    OutlinedTextField(
+                        textStyle = TextStyle(textAlign = TextAlign.Start),
+                        value = password.value,//add one that
+                        onValueChange = {
+                            password.value = it
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(50.dp),
+                        shape = RoundedCornerShape(10.dp),
+                        singleLine = true,
+                        colors = TextFieldDefaults.outlinedTextFieldColors(
+                            focusedBorderColor = AppBlue,
+                            cursorColor = AppBlue
+                        ),
+                        placeholder = {
+                            Text(
+                                text = "Password",
+                                fontSize = 15.sp
+                            )
+                        },
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                        visualTransformation = if (passwordVisible.value) VisualTransformation.None else PasswordVisualTransformation(),
+                        trailingIcon = {
+                            Icon(
+                                painter = if (passwordVisible.value) painterResource(id = R.drawable.opened_eye_ico) else painterResource(
+                                    id = R.drawable.closed_eye_ico
+                                ),
+                                contentDescription = null,
+                                modifier = Modifier
+                                    .size(20.dp)
+                                    .clickable {
+                                        passwordVisible.value = !passwordVisible.value
+                                    }
+                            )
+                        }
+                    )
+                }
+
+                Spacer(modifier = Modifier.weight(1f))
+
+                BTKLoginButton(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    text = "Kaydol",
+                    modifierButton = Modifier
+                        .height(50.dp)
+                        .width(300.dp)
+                , fontSize = 20.sp
+                ) {
+                    if (viewModel.checkEmailPasswordNameState(
+                            email = userEmail.value,
+                            password = password.value,
+                            nameSurname = userNameSurname.value
+                        )
+                    ) {
+                        viewModel.register(
+                            email = userEmail.value,
+                            password = password.value,
+                            nameSurname = userNameSurname.value
+                        )
+                    } else {
+                        //no op
+                    }
+                }
+
             }
         }
+    )
 
-    }
 }
 
 
-@Composable
-fun FinishButton(
-    modifier: Modifier,
-    text: String,
-    onClick: () -> Unit
-) {
-    Row(
-        modifier = modifier
-            .padding(horizontal = 55.dp),
-        verticalAlignment = Alignment.Top,
-        horizontalArrangement = Arrangement.Center
-    ) {
-
-        Button(
-            onClick = onClick,
-            colors = ButtonDefaults.buttonColors(
-                contentColor = Color.White,
-                backgroundColor = Navyblue
-            ),
-            shape = RoundedCornerShape(50)
-        ) {
-            Text(text = text)
-        }
-
-    }
-}
