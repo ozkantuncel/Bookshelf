@@ -13,7 +13,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
  import androidx.navigation.NavController
 import com.ozkan.bookshelf.R
- import com.ozkan.bookshelf.ui.screens.auth_screens.login.LoginViewModel
+import com.ozkan.bookshelf.ui.navigation.Screen
+import com.ozkan.bookshelf.ui.screens.auth_screens.login.LoginViewModel
 import com.ozkan.bookshelf.ui.screens.common.button.BKAIconButton
 
 @Composable
@@ -35,10 +36,10 @@ fun HomePage(
             icon = R.drawable.logout_ico,
             iconTint = Color.Blue,
         ) {
-            /*viewModel.logout {
+            viewModel.logout {
                 navController.popBackStack()
-                navController.navigate(Screen.Register.route)
-            }*/
+                navController.navigate(Screen.Login.route)
+            }
         }
     }
 }

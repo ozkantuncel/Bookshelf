@@ -1,6 +1,8 @@
 package com.ozkan.bookshelf.ui.screens.auth_screens.register
 
 
+import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -14,11 +16,13 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Icon
 import androidx.compose.material.OutlinedTextField
+import androidx.compose.material.RadioButton
+import androidx.compose.material.RadioButtonDefaults
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TextFieldDefaults
@@ -31,7 +35,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -47,12 +51,14 @@ import androidx.navigation.NavController
 import com.ozkan.bookshelf.R
 import com.ozkan.bookshelf.firebase.util.UiState
 import com.ozkan.bookshelf.ui.navigation.Screen
-import com.ozkan.bookshelf.ui.screens.api_state.ApiLoadingState
+import com.ozkan.bookshelf.ui.screens.common.api_state.ApiLoadingState
 import com.ozkan.bookshelf.ui.screens.common.button.BKAIconButton
-import com.ozkan.bookshelf.ui.screens.common.button.FinishButton
-import com.ozkan.bookshelf.ui.screens.common.button.BTKFinishButton
 import com.ozkan.bookshelf.ui.screens.common.button.BTKLoginButton
+import com.ozkan.bookshelf.ui.screens.common.dialog.BTKDialogWithTextFiledAndButton
+import com.ozkan.bookshelf.ui.screens.common.text.HyperlinkText
+import com.ozkan.bookshelf.ui.theme.AppBac
 import com.ozkan.bookshelf.ui.theme.AppBlue
+import com.ozkan.bookshelf.ui.theme.Navyblue
 
 
 @Composable
@@ -63,6 +69,7 @@ fun RegisterPage(
     val registerState = viewModel.registerState.value
     val errorDialogState = remember { mutableStateOf(false) }
     val errorTitle = remember { mutableStateOf("") }
+    val mContext = LocalContext.current
 
     when (registerState) {
         is UiState.Loading -> {
@@ -86,8 +93,10 @@ fun RegisterPage(
 
     RegisterPage(
         viewModel = viewModel,
+        navController = navController,
         errorDialogState = errorDialogState,
-        errorTitle = errorTitle.value
+        errorTitle = errorTitle.value,
+        mContext = mContext
     )
 
 }
@@ -95,16 +104,20 @@ fun RegisterPage(
 @Composable
 fun RegisterPage(
     viewModel: RegisterViewModel,
+    navController: NavController,
+    mContext: Context,
     errorDialogState: MutableState<Boolean>,
-    errorTitle: String
-) {
+    errorTitle: String,
+
+    ) {
     val userEmail = remember { mutableStateOf("") }
     val userNameSurname = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
     val passwordVisible = remember { mutableStateOf(false) }
+    val isAllowTerms = remember { mutableStateOf(false) }
 
     Scaffold(
-        backgroundColor = Color.White,
+        backgroundColor = AppBac,
         topBar = {
             TopAppBar(
                 title = {},
@@ -117,43 +130,33 @@ fun RegisterPage(
                         icon = R.drawable.left_ico,
                         iconTint = Color.Gray
                     ) {
-                        //Eklenecek
+                        navController.popBackStack()
+                        navController.navigate(Screen.Login.route)
                     }
                 })
         },
         content = {
             Column(
                 modifier = Modifier
-                    .padding(horizontal = 35.dp, vertical = 10.dp)
+                    .padding(horizontal = 10.dp, vertical = 10.dp)
                     .fillMaxSize(),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-
-
-                Image(
-                    modifier = Modifier
-                        .fillMaxWidth(1f)
-                        .fillMaxHeight(0.35f),
-                    painter = painterResource(id = R.drawable.signup),
-                    contentDescription = null,
-                    )
-
-                Spacer(modifier = Modifier.height(25.dp))
 
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.Start
                 ) {
                     Text(
-                        text = "Kayıt Ol",
-                        color = Color.Black,
+                        text = "Yeni Bir Üyelik Oluştur",
+                        color = Navyblue,
                         fontSize = 30.sp,
-                        fontWeight = FontWeight.Bold
+                        fontWeight = FontWeight.SemiBold
                     )
                 }
 
-                Spacer(modifier = Modifier.height(25.dp))
+                Spacer(modifier = Modifier.weight(0.1f))
 
                 Row(modifier = Modifier.fillMaxWidth()) {
 
@@ -192,7 +195,7 @@ fun RegisterPage(
                     )
                 }
 
-                Spacer(modifier = Modifier.height(25.dp))
+                Spacer(modifier = Modifier.weight(0.1f))
 
                 Row(modifier = Modifier.fillMaxWidth()) {
                     Icon(
@@ -231,7 +234,7 @@ fun RegisterPage(
                     )
                 }
 
-                Spacer(modifier = Modifier.height(25.dp))
+                Spacer(modifier = Modifier.weight(0.1f))
 
                 Row(modifier = Modifier.fillMaxWidth()) {
                     Icon(
@@ -281,7 +284,39 @@ fun RegisterPage(
                     )
                 }
 
-                Spacer(modifier = Modifier.weight(1f))
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 10.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Row(
+                        modifier = Modifier.wrapContentWidth(),
+                        horizontalArrangement = Arrangement.Start,
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        RadioButton(
+                            selected = isAllowTerms.value,
+                            onClick = {
+                                isAllowTerms.value = !isAllowTerms.value
+                            },
+                            colors = RadioButtonDefaults.colors(selectedColor = Navyblue)
+                        )
+                    }
+                    HyperlinkText(
+                        fullText = "Tıklayarak, Koşullarımızı ve Gizlilik İlkemizi kabul etmiş olursun.",
+                        linkText = listOf("Koşullarımızı", "Gizlilik İlkemizi"),
+                        hyperlinks = listOf(
+                            "https://github.com/ozkantuncel",
+                            "https://www.google.com/"
+                        ),
+                        fontSize = 13.sp
+                    )
+                }
+
+
+                Spacer(modifier = Modifier.weight(0.2f))
 
                 BTKLoginButton(
                     modifier = Modifier
@@ -289,14 +324,13 @@ fun RegisterPage(
                     text = "Kaydol",
                     modifierButton = Modifier
                         .height(50.dp)
-                        .width(300.dp)
-                , fontSize = 20.sp
+                        .width(350.dp), fontSize = 20.sp
                 ) {
                     if (viewModel.checkEmailPasswordNameState(
                             email = userEmail.value,
                             password = password.value,
                             nameSurname = userNameSurname.value
-                        )
+                        ) && isAllowTerms.value
                     ) {
                         viewModel.register(
                             email = userEmail.value,
@@ -304,13 +338,36 @@ fun RegisterPage(
                             nameSurname = userNameSurname.value
                         )
                     } else {
-                        //no op
+                        Toast.makeText(
+                            mContext,
+                            "Bilgiler uyuşmuyor ya da şartları kabul etmediniz",
+                            Toast.LENGTH_LONG
+                        ).show()
                     }
+
                 }
+
+                Image(
+                    modifier = Modifier
+                        .fillMaxWidth(0.6f)
+                        .fillMaxHeight(0.6f),
+                    painter = painterResource(id = R.drawable.signup),
+                    contentDescription = null,
+                )
+
 
             }
         }
     )
+
+    if (errorDialogState.value) {
+        BTKDialogWithTextFiledAndButton(
+            openTheDialog = errorDialogState,
+            content = {},
+            title = "Hata",
+            message = errorTitle
+        )
+    }
 
 }
 

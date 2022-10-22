@@ -3,11 +3,9 @@ package com.ozkan.bookshelf.ui.screens.splash_screen
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ozkan.bookshelf.data.repository.DataStoreRepository
-import com.ozkan.bookshelf.ui.MainActivity
 import com.ozkan.bookshelf.ui.navigation.Screen
 import com.ozkan.bookshelf.util.pref.Prefs
 import kotlinx.coroutines.flow.collect
@@ -29,10 +27,10 @@ class SplashViewModel @Inject constructor(
         viewModelScope.launch {
             repository.readOnBoardingState().collect { completed ->
                 if (completed) {
-                    if (getRememberMeState()){
+                    if (getRememberMeState()) {
                         _startDestination.value = Screen.Home.route
-                    }else{
-                        _startDestination.value = Screen.Register.route
+                    } else {
+                        _startDestination.value = Screen.Login.route
                     }
                 } else {
                     _startDestination.value = Screen.OnBoarding.route

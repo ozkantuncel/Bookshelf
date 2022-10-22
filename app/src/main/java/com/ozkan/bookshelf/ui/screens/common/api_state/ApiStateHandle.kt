@@ -1,4 +1,4 @@
-package com.ozkan.bookshelf.ui.screens.api_state
+package com.ozkan.bookshelf.ui.screens.common.api_state
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize

@@ -1,6 +1,5 @@
 package com.ozkan.bookshelf.firebase.repository
 
-import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
@@ -75,14 +74,14 @@ class AuthRepositoryImpl(
         rememberMeState: Boolean,
         result: (UiState<String>) -> Unit
     ) {
-        auth.signInWithEmailAndPassword(email,password)
+        auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
-                if (task.isSuccessful){
+                if (task.isSuccessful) {
                     storeSession(
-                        id = task.result.user?.uid?:"",
+                        id = task.result.user?.uid ?: "",
                         rememberMeState = rememberMeState,
                         isLogin = true
-                    ){
+                    ) {
                         if (it == null) {
                             result.invoke(UiState.Failure("Failed to store local session"))
                         } else {
@@ -90,7 +89,7 @@ class AuthRepositoryImpl(
                         }
                     }
                 }
-            }.addOnCompleteListener {
+            }.addOnFailureListener {
                 result.invoke(UiState.Failure("Authentication failed, Check email and password"))
             }
     }
@@ -132,8 +131,8 @@ class AuthRepositoryImpl(
 
     override fun updateUserInfo(
         user: User,
-        result: (UiState<String>) -> Unit)
-    {
+        result: (UiState<String>) -> Unit
+    ) {
         val document = database.collection(FirebaseFireStoreConstants.USERS).document(user.id)
         document.set(user)
             .addOnSuccessListener {
@@ -151,7 +150,16 @@ class AuthRepositoryImpl(
     }
 
     override fun forgotPassword(email: String, result: (UiState<String>) -> Unit) {
-        TODO("Not yet implemented")
+        auth.sendPasswordResetEmail(email)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    result.invoke(UiState.Success("Email has been sent"))
+                } else {
+                    result.invoke(UiState.Failure(task.exception?.message))
+                }
+            }.addOnFailureListener {
+                result.invoke(UiState.Failure("Authentication failed, Check email!"))
+            }
     }
 
     override fun logout(result: () -> Unit) {
