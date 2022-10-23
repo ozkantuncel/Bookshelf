@@ -1,7 +1,6 @@
 package com.ozkan.bookshelf.ui.screens.auth_screens.login
 
-import android.content.Context
-import android.widget.Toast
+import android.app.Activity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -16,6 +15,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
@@ -57,6 +57,8 @@ import com.ozkan.bookshelf.ui.screens.common.dialog.BTKDialogWithTextFiledAndBut
 import com.ozkan.bookshelf.ui.theme.AppBac
 import com.ozkan.bookshelf.ui.theme.AppBlue
 import com.ozkan.bookshelf.ui.theme.Navyblue
+import com.ozkan.bookshelf.util.extension.hideKeyboard
+import com.ozkan.bookshelf.util.extension.toast
 
 
 @Composable
@@ -69,7 +71,7 @@ fun LoginScreen(
     val forgotPasswordDialogState = remember { mutableStateOf(false) }
     val errorDialogState = remember { mutableStateOf(false) }
     val errorTitle = remember { mutableStateOf("") }
-    val mContext = LocalContext.current
+    val activity = LocalContext.current as Activity
 
     when (loginState) {
         is UiState.Loading -> {
@@ -77,7 +79,7 @@ fun LoginScreen(
         }
 
         is UiState.Success -> {
-            Toast.makeText(mContext, loginState.data, Toast.LENGTH_LONG).show()
+            activity.toast(loginState.data)
             LaunchedEffect(true) {
                 navController.popBackStack()
                 navController.navigate(Screen.Home.route)
@@ -101,12 +103,12 @@ fun LoginScreen(
 
         is UiState.Failure -> {
             forgotPasswordState.error?.let {
-                Toast.makeText(mContext, it, Toast.LENGTH_LONG).show()
+                activity.toast(it)
             }
         }
 
         is UiState.Success -> {
-            Toast.makeText(mContext, forgotPasswordState.data, Toast.LENGTH_LONG).show()
+            activity.toast(forgotPasswordState.data)
         }
 
         is UiState.Empty -> {}
@@ -116,7 +118,7 @@ fun LoginScreen(
         viewModel = viewModel,
         navController = navController,
         forgotPasswordDialogState = forgotPasswordDialogState,
-        mContext = mContext,
+        activity = activity,
         errorDialogState = errorDialogState,
         errorTitle = errorTitle.value,
 
@@ -129,7 +131,7 @@ fun LoginScreenPage(
     viewModel: LoginViewModel,
     navController: NavController,
     forgotPasswordDialogState: MutableState<Boolean>,
-    mContext: Context,
+    activity: Activity,
     errorDialogState: MutableState<Boolean>,
     errorTitle: String,
 ) {
@@ -266,7 +268,8 @@ fun LoginScreenPage(
                                 passwordVisible.value = !passwordVisible.value
                             }
                     )
-                }
+                },
+                keyboardActions = KeyboardActions(onDone = { activity.hideKeyboard() })
             )
         }
 
@@ -334,7 +337,7 @@ fun LoginScreenPage(
                     rememberMeState = rememberMeState.value
                 )
             } else {
-                Toast.makeText(mContext, "Bilgiler uyuşmuyor", Toast.LENGTH_LONG).show()
+                activity.toast("Bilgiler uyuşmuyor")
             }
         }
 
@@ -404,9 +407,9 @@ fun LoginScreenPage(
                             )
                         },
                         keyboardOptions = KeyboardOptions(
-                            imeAction = ImeAction.Next,
                             keyboardType = KeyboardType.Email
-                        )
+                        ),
+                        keyboardActions = KeyboardActions(onDone = { activity.hideKeyboard() })
                     )
 
                     Button(
@@ -421,11 +424,7 @@ fun LoginScreenPage(
                             if (forgotUserEmail.value.isNotEmpty()) {
                                 viewModel.forgotPassword(email = forgotUserEmail.value)
                             } else {
-                                Toast.makeText(
-                                    mContext,
-                                    "Mail adresnizi giriniz!",
-                                    Toast.LENGTH_LONG
-                                ).show()
+                                activity.toast("Mail adresnizi giriniz!")
                             }
                         }) {
                         Text(

@@ -1,8 +1,7 @@
 package com.ozkan.bookshelf.ui.screens.auth_screens.register
 
 
-import android.content.Context
-import android.widget.Toast
+import android.app.Activity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -18,6 +17,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Icon
 import androidx.compose.material.OutlinedTextField
@@ -59,6 +59,8 @@ import com.ozkan.bookshelf.ui.screens.common.text.HyperlinkText
 import com.ozkan.bookshelf.ui.theme.AppBac
 import com.ozkan.bookshelf.ui.theme.AppBlue
 import com.ozkan.bookshelf.ui.theme.Navyblue
+import com.ozkan.bookshelf.util.extension.hideKeyboard
+import com.ozkan.bookshelf.util.extension.toast
 
 
 @Composable
@@ -69,7 +71,8 @@ fun RegisterPage(
     val registerState = viewModel.registerState.value
     val errorDialogState = remember { mutableStateOf(false) }
     val errorTitle = remember { mutableStateOf("") }
-    val mContext = LocalContext.current
+    val activity = LocalContext.current as Activity
+
 
     when (registerState) {
         is UiState.Loading -> {
@@ -96,7 +99,7 @@ fun RegisterPage(
         navController = navController,
         errorDialogState = errorDialogState,
         errorTitle = errorTitle.value,
-        mContext = mContext
+        activity = activity
     )
 
 }
@@ -105,11 +108,11 @@ fun RegisterPage(
 fun RegisterPage(
     viewModel: RegisterViewModel,
     navController: NavController,
-    mContext: Context,
     errorDialogState: MutableState<Boolean>,
     errorTitle: String,
+    activity: Activity
 
-    ) {
+) {
     val userEmail = remember { mutableStateOf("") }
     val userNameSurname = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
@@ -280,7 +283,8 @@ fun RegisterPage(
                                         passwordVisible.value = !passwordVisible.value
                                     }
                             )
-                        }
+                        },
+                        keyboardActions = KeyboardActions(onDone = { activity.hideKeyboard() })
                     )
                 }
 
@@ -338,11 +342,7 @@ fun RegisterPage(
                             nameSurname = userNameSurname.value
                         )
                     } else {
-                        Toast.makeText(
-                            mContext,
-                            "Bilgiler uyuşmuyor ya da şartları kabul etmediniz",
-                            Toast.LENGTH_LONG
-                        ).show()
+                        activity.toast("Bilgiler uyuşmuyor ya da şartları kabul etmediniz")
                     }
 
                 }
