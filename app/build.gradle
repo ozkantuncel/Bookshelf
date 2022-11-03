@@ -89,6 +89,12 @@ dependencies {
     // DataStore Preferences
     implementation("androidx.datastore:datastore-preferences:1.0.0")
 
+    //Gson
+    implementation 'com.google.code.gson:gson:2.9.1'
+
+    // Hawk
+    implementation("com.orhanobut:hawk:2.0.1")
+
      //Firebase
     implementation 'com.google.firebase:firebase-auth-ktx:21.0.8'
     implementation 'com.google.firebase:firebase-analytics-ktx:21.1.1'
