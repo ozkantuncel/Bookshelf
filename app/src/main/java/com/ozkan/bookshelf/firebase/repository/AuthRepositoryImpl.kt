@@ -17,7 +17,6 @@ class AuthRepositoryImpl(
     private val database: FirebaseFirestore,
     private val gson: Gson
 ) : AuthRepository {
-
     override fun registerUser(
         email: String,
         password: String,
@@ -42,11 +41,8 @@ class AuthRepositoryImpl(
                             is UiState.Failure -> {
                                 result.invoke(UiState.Failure(state.error))
                             }
-                            else -> {
-
-                            }
+                            else -> {}
                         }
-
                     }
                 } else {
                     try {

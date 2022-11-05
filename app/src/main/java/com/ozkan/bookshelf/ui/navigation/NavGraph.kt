@@ -8,7 +8,7 @@ import androidx.navigation.compose.composable
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.ozkan.bookshelf.ui.screens.auth_screens.login.LoginScreen
 import com.ozkan.bookshelf.ui.screens.auth_screens.register.RegisterPage
-import com.ozkan.bookshelf.ui.screens.main_screens.HomePage
+import com.ozkan.bookshelf.ui.screens.main_screens.HomeScreen
 import com.ozkan.bookshelf.ui.screens.on_boarding_screens.OnBoardingPage
 
 @ExperimentalAnimationApi
@@ -23,7 +23,7 @@ fun NavGraph(
         startDestination = startDestination
     ) {
         composable(route = Screen.Home.route) {
-            HomePage(navController= navController)
+            HomeScreen(navController= navController)
         }
         composable(route = Screen.OnBoarding.route) {
             OnBoardingPage(navController = navController)
