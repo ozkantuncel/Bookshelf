@@ -5,6 +5,7 @@ plugins {
     id 'dagger.hilt.android.plugin'
     id 'com.google.gms.google-services'
     id 'com.google.firebase.crashlytics'
+    id 'kotlin-parcelize'
 
 }
 
@@ -76,6 +77,9 @@ dependencies {
     //Viewmodel
     implementation "androidx.lifecycle:lifecycle-viewmodel-compose:2.4.1"
 
+    //Retroift and Moshi
+    implementation "com.squareup.retrofit2:converter-moshi:2.4.0"
+
     // Splash API
     implementation 'androidx.core:core-splashscreen:1.0.0-beta01'
 
@@ -95,7 +99,10 @@ dependencies {
     // Hawk
     implementation("com.orhanobut:hawk:2.0.1")
 
-     //Firebase
+    //Coil
+    implementation("io.coil-kt:coil-compose:2.2.2")
+
+    //Firebase
     implementation 'com.google.firebase:firebase-auth-ktx:21.0.8'
     implementation 'com.google.firebase:firebase-analytics-ktx:21.1.1'
     implementation 'com.google.firebase:firebase-database-ktx:20.0.6'

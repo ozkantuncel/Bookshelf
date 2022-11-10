@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.PagerState
+import com.ozkan.bookshelf.R
 import com.ozkan.bookshelf.ui.theme.Navyblue
 
 @Composable
@@ -39,7 +40,7 @@ fun BKAIconButton(
         onClick = { onButtonClick() },
         modifier = modifier,
         enabled = enabled,
-        ) {
+    ) {
         icon?.let {
             Icon(
                 painter = painterResource(id = icon),
@@ -81,7 +82,9 @@ fun FinishButton(
             }
         }
     }
-}@ExperimentalAnimationApi
+}
+
+@ExperimentalAnimationApi
 @ExperimentalPagerApi
 @Composable
 fun BTKFinishButton(
@@ -140,6 +143,38 @@ fun BTKLoginButton(
                 fontSize = fontSize
             )
         }
+    }
+}
 
+@Composable
+fun BTKAddBasketButton(
+    modifier: Modifier=Modifier,
+    modifierButton: Modifier=Modifier,
+    text: String = "Ekle",
+    fontSize: TextUnit = 18.sp,
+    onClick: () -> Unit
+){
+    Row(
+        modifier = modifier,
+        horizontalArrangement = Arrangement.Center
+    ) {
+
+        Button(
+            modifier = modifierButton,
+            onClick = onClick,
+            colors = ButtonDefaults.buttonColors(
+                contentColor = Color.White,
+                backgroundColor = Navyblue
+            ),
+            shape = RoundedCornerShape(50)
+        ) {
+            Icon(painter = painterResource(id = R.drawable.basket_ico) ,
+                contentDescription =null 
+            )
+            Text(
+                text = text,
+                fontSize = fontSize
+            )
+        }
     }
 }

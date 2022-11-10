@@ -1,4 +1,4 @@
-package com.ozkan.bookshelf.ui.screens.main_screens
+package com.ozkan.bookshelf.ui.screens.main_screens.home
 
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
@@ -14,11 +14,16 @@ import javax.inject.Inject
 class HomeScreenViewModel @Inject constructor(
     val repository: BookRepository
 ) : ViewModel() {
+
     private val _books: MutableState<UiState<List<Book>>> = mutableStateOf(UiState.Empty)
     val book: State<UiState<List<Book>>>
         get() = _books
 
-    fun getBooks() {
+    init {
+        getBooks()
+    }
+
+    private fun getBooks() {
         _books.value = UiState.Loading
         repository.getBooks { _books.value = it }
     }
