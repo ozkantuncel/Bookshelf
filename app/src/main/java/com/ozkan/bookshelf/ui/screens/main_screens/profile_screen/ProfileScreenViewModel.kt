@@ -27,6 +27,14 @@ class ProfileScreenViewModel @Inject constructor(
         }
     }
 
+    fun updateUserInfo(){
+        repository.getSession {
+            it?.let {
+                getUserInfo(it.id)
+            }
+        }
+    }
+
     private fun getUserInfo(
         id: String
     ) {

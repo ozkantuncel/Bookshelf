@@ -37,7 +37,7 @@ class FavoriteScreenViewModel @Inject constructor(
         userId: String
     ){
         _bookMark.value = UiState.Loading
-        repository.addBookToMark(
+        repository.deleteBookMark(
             book = book,
             userId = userId
         ){

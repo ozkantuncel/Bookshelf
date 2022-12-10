@@ -49,7 +49,7 @@ fun NavGraph(
             BasketScreen()
         }
         composable(route = BottomBarScreen.Favorite.route) {
-            FavoriteScreen()
+            FavoriteScreen(navController)
         }
 
         composable(route = MainScreen.DetailBook.route) {

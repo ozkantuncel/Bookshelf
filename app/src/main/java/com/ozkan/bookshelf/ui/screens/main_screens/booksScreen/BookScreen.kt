@@ -91,8 +91,8 @@ fun BookScreen(
     BookPage(
         navController = navController,
         data = data,
-        favoriteScreenViewModel,
-        userId.value
+        favoriteScreenViewModel = favoriteScreenViewModel,
+        userId = userId.value
     )
 }
 
