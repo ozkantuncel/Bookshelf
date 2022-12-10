@@ -33,13 +33,16 @@ import coil.compose.rememberAsyncImagePainter
 import com.ozkan.bookshelf.R
 import com.ozkan.bookshelf.firebase.dto.Book
 import com.ozkan.bookshelf.ui.navigation.MainScreen
+import com.ozkan.bookshelf.ui.screens.main_screens.favorite_screen.FavoriteScreenViewModel
 import com.ozkan.bookshelf.ui.theme.AppBac
 import com.ozkan.bookshelf.ui.theme.Navyblue
 
 @Composable
 fun CardBook(
     navController: NavController,
-    book: Book
+    book: Book,
+    favoriteScreenViewModel: FavoriteScreenViewModel,
+    userId: String
 ) {
     Card(
         modifier = Modifier
@@ -113,7 +116,9 @@ fun CardBook(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
-                IconButton(onClick = { /*TODO*/ }) {
+                IconButton(onClick = {
+                    favoriteScreenViewModel.addBookMark(book = book, userId = userId)
+                }) {
                     Icon(
                         modifier = Modifier.size(28.dp),
                         painter = painterResource(id = R.drawable.fav_ico),

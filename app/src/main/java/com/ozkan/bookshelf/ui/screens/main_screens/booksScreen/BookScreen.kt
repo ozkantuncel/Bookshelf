@@ -1,6 +1,5 @@
 package com.ozkan.bookshelf.ui.screens.main_screens.booksScreen
 
-import android.app.Activity
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -19,7 +18,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -30,8 +28,10 @@ import com.ozkan.bookshelf.firebase.dto.Book
 import com.ozkan.bookshelf.firebase.util.UiState
 import com.ozkan.bookshelf.ui.screens.common.api_state.ApiLoadingState
 import com.ozkan.bookshelf.ui.screens.common.button.BKAIconButton
+import com.ozkan.bookshelf.ui.screens.main_screens.favorite_screen.FavoriteScreenViewModel
 import com.ozkan.bookshelf.ui.screens.main_screens.home.CardBook
 import com.ozkan.bookshelf.ui.screens.main_screens.home.HomeScreenViewModel
+import com.ozkan.bookshelf.ui.screens.main_screens.profile_screen.ProfileScreenViewModel
 import com.ozkan.bookshelf.ui.theme.AppBac
 import com.ozkan.bookshelf.ui.theme.Navyblue
 
@@ -39,13 +39,15 @@ import com.ozkan.bookshelf.ui.theme.Navyblue
 @Composable
 fun BookScreen(
     navController: NavController,
-    homeScreenViewModel: HomeScreenViewModel = hiltViewModel()
+    homeScreenViewModel: HomeScreenViewModel = hiltViewModel(),
+    favoriteScreenViewModel: FavoriteScreenViewModel = hiltViewModel(),
+    profileScreenViewModel: ProfileScreenViewModel = hiltViewModel()
 ) {
-    val activity = LocalContext.current as Activity
+
     val bookState = homeScreenViewModel.book.value
     var data: List<Book> = listOf()
-    val errorDialogState = remember { mutableStateOf(false) }
-    val errorTitle = remember { mutableStateOf("") }
+    val errorDialogStateBook = remember { mutableStateOf(false) }//TODO
+    val errorTitleBook = remember { mutableStateOf("") }//TODO
 
     when (bookState) {
         is UiState.Loading -> {
@@ -53,8 +55,8 @@ fun BookScreen(
         }
         is UiState.Failure -> {
             bookState.error?.let {
-                errorTitle.value = it
-                errorDialogState.value = true
+                errorTitleBook.value = it
+                errorDialogStateBook.value = true
             }
         }
         is UiState.Success -> {
@@ -63,16 +65,43 @@ fun BookScreen(
         is UiState.Empty -> {}
     }
 
+    val profileDataState = profileScreenViewModel.getUserInfo.value
+    val errorDialogStateProfile = remember { mutableStateOf(false) }//TODO
+    val errorTitleProfile = remember { mutableStateOf("") }//TODO
+    val userId = remember {
+        mutableStateOf("")
+    }
+
+    when (profileDataState) {
+        is UiState.Loading -> {}
+
+        is UiState.Failure -> {
+            profileDataState.error?.let {
+                errorTitleProfile.value = it
+                errorDialogStateProfile.value = true
+            }
+        }
+        is UiState.Success -> {
+            userId.value = profileDataState.data.id
+        }
+
+        is UiState.Empty -> {}
+    }
+
     BookPage(
         navController = navController,
-        data = data
+        data = data,
+        favoriteScreenViewModel,
+        userId.value
     )
 }
 
 @Composable
 fun BookPage(
     navController: NavController,
-    data: List<Book>
+    data: List<Book>,
+    favoriteScreenViewModel: FavoriteScreenViewModel,
+    userId: String
 ) {
     Scaffold(
         backgroundColor = AppBac,
@@ -114,7 +143,12 @@ fun BookPage(
                 LazyColumn(content = {
                     items(data) { book ->
 
-                        CardBook(navController = navController, book = book)
+                        CardBook(
+                            navController = navController,
+                            book = book,
+                            favoriteScreenViewModel = favoriteScreenViewModel,
+                            userId = userId
+                        )
                     }
                 })
             }
