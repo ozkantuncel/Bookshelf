@@ -147,7 +147,7 @@ fun BTKLoginButton(
 }
 
 @Composable
-fun BTKAddBasketButton(
+fun BTKAddCartButton(
     modifier: Modifier=Modifier,
     modifierButton: Modifier=Modifier,
     text: String = "Ekle",

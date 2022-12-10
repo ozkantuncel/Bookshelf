@@ -12,7 +12,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeScreenViewModel @Inject constructor(
-    val repository: BookRepository
+    private val repository: BookRepository
 ) : ViewModel() {
 
     private val _books: MutableState<UiState<List<Book>>> = mutableStateOf(UiState.Empty)

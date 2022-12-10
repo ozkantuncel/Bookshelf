@@ -8,9 +8,6 @@ data class User(
     var nameSurname: String = "",
     var email: String = "",
     var profileImageUrl: String = "",
-
-    val cartProducts: List<Book> = listOf(),
-    val bookmarksProducts: List<Book> = listOf(),
-    val oldOrders: List<Book> = listOf(),
-    val activeOrders: List<Book> = listOf(),
+    var cartBook: List<Cart> = listOf(),
+    var bookmarksProducts: List<Book> = listOf(),
 ): Parcelable

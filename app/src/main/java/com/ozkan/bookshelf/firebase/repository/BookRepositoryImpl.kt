@@ -8,6 +8,7 @@ import com.ozkan.bookshelf.firebase.remote.BookRepository
 import com.ozkan.bookshelf.firebase.util.UiState
 import com.ozkan.bookshelf.util.FirebaseFireStoreConstants
 import com.google.firebase.firestore.Query
+import com.ozkan.bookshelf.firebase.dto.Cart
 import com.ozkan.bookshelf.util.FireStoreDocumentField
 
 class BookRepositoryImpl(
@@ -45,7 +46,7 @@ class BookRepositoryImpl(
             .document(userId)
             .update("bookmarksProducts", FieldValue.arrayUnion(book))
             .addOnSuccessListener {
-                result.invoke(UiState.Success("Book has been mark successfully"))
+                result.invoke(UiState.Success("Book has been add in mark successfully"))
             }.addOnFailureListener {
                 result.invoke(UiState.Failure(it.localizedMessage))
             }
@@ -60,10 +61,41 @@ class BookRepositoryImpl(
             .document(userId)
             .update("bookmarksProducts", FieldValue.arrayRemove(book))
             .addOnSuccessListener {
-                result.invoke(UiState.Success("Book has been remove mark successfully"))
+                result.invoke(UiState.Success("Book has been remove in mark successfully"))
             }.addOnFailureListener {
-                UiState.Failure(it.localizedMessage)
+                result.invoke(UiState.Failure(it.localizedMessage))
             }
     }
+
+    override fun addCart(
+        cart: Cart,
+        userId: String,
+        result: (UiState<String>) -> Unit
+    ) {
+        database.collection(FirebaseFireStoreConstants.USERS)
+            .document(userId)
+            .update("cartBook",FieldValue.arrayUnion(cart))
+            .addOnSuccessListener {
+                result.invoke(UiState.Success("Book has been add in cart successfully"))
+            }.addOnFailureListener{
+                result.invoke(UiState.Failure(it.localizedMessage))
+            }
+    }
+
+    override fun deleteCart(
+        cart: Cart,
+        userId: String,
+        result: (UiState<String>) -> Unit
+    ) {
+        database.collection(FirebaseFireStoreConstants.USERS)
+            .document(userId)
+            .update("cartBook",FieldValue.arrayRemove(cart))
+            .addOnSuccessListener {
+                result.invoke(UiState.Success("Book has been delete in cart successfully"))
+            }.addOnFailureListener{
+                result.invoke(UiState.Failure(it.localizedMessage))
+            }
+    }
+
 
 }

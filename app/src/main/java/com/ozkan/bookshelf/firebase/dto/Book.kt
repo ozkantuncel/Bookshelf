@@ -10,7 +10,7 @@ data class Book(
     var title: String = "",
     var author: String = "",
     var description: String = "",
-    val tags: List<String> = listOf(),
-    val images: List<String> = listOf(),
+    var tags: List<String> = listOf(),
+    var images: List<String> = listOf(),
     var price: String = ""
 ) : Parcelable
