@@ -6,5 +6,6 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class Cart(
     var item:String?="",
+    var totalPrice:String?="",
     var book: Book? = null
 ): Parcelable

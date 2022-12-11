@@ -15,7 +15,7 @@ import javax.inject.Inject
 @HiltViewModel
 class CartScreenViewModel @Inject constructor(
     private val repository: BookRepository
-): ViewModel() {
+) : ViewModel() {
 
 
     private val _bookCart: MutableState<UiState<String>> = mutableStateOf(UiState.Empty)
@@ -26,16 +26,18 @@ class CartScreenViewModel @Inject constructor(
     fun addCart(
         item: String,
         book: Book,
+        totalPrice: String,
         userId: String
-    ){
+    ) {
         _bookCart.value = UiState.Loading
         repository.addCart(
             cart = Cart(
                 item = item,
-                book = book
+                book = book,
+                totalPrice = totalPrice
             ),
             userId = userId
-        ){
+        ) {
             _bookCart.value = it
         }
     }
@@ -43,16 +45,18 @@ class CartScreenViewModel @Inject constructor(
     fun deleteCart(
         item: String,
         book: Book,
+        totalPrice: String,
         userId: String
-    ){
+    ) {
         _bookCart.value = UiState.Loading
         repository.deleteCart(
             cart = Cart(
                 item = item,
-                book = book
+                book = book,
+                totalPrice = totalPrice
             ),
             userId = userId
-        ){
+        ) {
             _bookCart.value = it
         }
     }

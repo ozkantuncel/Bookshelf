@@ -18,6 +18,7 @@ sealed class BottomBarScreen(val icon: Int, val route: String) {
 sealed class MainScreen(val route: String) {
     object EditPerson : MainScreen(route = "edit_person")
     object DetailBook : MainScreen(route = "detail_book")
+    object CartDetailBook : MainScreen(route = "cart_detail_book")
     object SettingPerson : MainScreen(route = "setting_person")
 }
 

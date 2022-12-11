@@ -1,5 +1,4 @@
-package com.ozkan.bookshelf.ui.screens.main_screens.booksScreen.book_detail
-
+package com.ozkan.bookshelf.ui.screens.main_screens.basket_screen.detail_cart_book
 
 import android.app.Activity
 import androidx.activity.compose.BackHandler
@@ -37,7 +36,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.ozkan.bookshelf.R
-import com.ozkan.bookshelf.firebase.dto.Book
+import com.ozkan.bookshelf.firebase.dto.Cart
 import com.ozkan.bookshelf.firebase.util.UiState
 import com.ozkan.bookshelf.ui.navigation.BottomBarScreen
 import com.ozkan.bookshelf.ui.screens.common.api_state.ApiLoadingState
@@ -51,15 +50,15 @@ import com.ozkan.bookshelf.ui.theme.BottomBack
 import com.ozkan.bookshelf.ui.theme.Navyblue
 
 @Composable
-fun BookDetailScreen(
-    book: Book,
+fun CartBookDetailScreen(
+    cart: Cart,
     navController: NavController,
     cartScreenViewModel: CartScreenViewModel = hiltViewModel(),
     profileScreenViewModel: ProfileScreenViewModel = hiltViewModel()
 ) {
     val activity = LocalContext.current as Activity
 
-    val bookItem = remember { mutableStateOf(1) }
+    val bookItem = remember { mutableStateOf(cart.item!!.toInt()) }
 
 
     val imgURL = remember { mutableStateOf("") }
@@ -71,14 +70,14 @@ fun BookDetailScreen(
 
 
     LaunchedEffect(key1 = true) {
-        imgURL.value = book.images[0]
-        bookPrice.value = book.price
-        bookTitle.value = book.title
-        bookAuthor.value = book.author
-        bookDescription.value = book.description
+        imgURL.value = cart.book!!.images[0]
+        bookPrice.value = cart.book!!.price
+        bookTitle.value = cart.book!!.title
+        bookAuthor.value = cart.book!!.author
+        bookDescription.value = cart.book!!.description
     }
 
-    val totalP = remember { mutableStateOf(book.price.toFloat()) }
+    val totalP = remember { mutableStateOf(cart.book!!.price.toFloat()) }
 
     val bookState = cartScreenViewModel.bookCartState.value
     val errorDialogStateBook = remember { mutableStateOf(false) }//TODO
@@ -96,6 +95,7 @@ fun BookDetailScreen(
         }
         is UiState.Success -> {
             LaunchedEffect(true) {
+                profileScreenViewModel.updateUserInfo()
                 navController.popBackStack()
                 navController.navigate(BottomBarScreen.Books.route)
             }
@@ -234,16 +234,23 @@ fun BookDetailScreen(
                                     modifierButton = Modifier.size(
                                         width = 155.dp,
                                         height = 40.dp
-                                    )
+                                    ),
+                                    text = "Değiştir"
                                 ) {
                                     val userId = profileScreenViewModel.getUserId.value
+                                    cartScreenViewModel.deleteCart(
+                                        item = cart.item!!,
+                                        book = cart.book!!,
+                                        userId = userId,
+                                        totalPrice = cart.totalPrice!!
+                                    )
                                     cartScreenViewModel.addCart(
                                         item = bookItem.value.toString(),
-                                        book = book,
+                                        book = cart.book!!,
                                         userId = userId,
                                         totalPrice = totalP.value.toString()
                                     )
-                                    profileScreenViewModel.updateUserInfo()
+
                                 }
                                 Spacer(modifier = Modifier.weight(1f))
                                 BTKButtonItem(

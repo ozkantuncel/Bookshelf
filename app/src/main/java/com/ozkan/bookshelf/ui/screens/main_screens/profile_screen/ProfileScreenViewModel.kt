@@ -19,8 +19,8 @@ class ProfileScreenViewModel @Inject constructor(
     val getUserInfo: State<UiState<User>>
         get() = _getUserInfo
 
-    private val _getUserId:MutableState<String> = mutableStateOf("")
-    val getUserId:State<String>
+    private val _getUserId: MutableState<String> = mutableStateOf("")
+    val getUserId: State<String>
         get() = _getUserId
 
     init {
@@ -32,7 +32,7 @@ class ProfileScreenViewModel @Inject constructor(
         }
     }
 
-    fun updateUserInfo(){
+    fun updateUserInfo() {
         repository.getSession {
             it?.let {
                 getUserInfo(it.id)
@@ -56,6 +56,7 @@ class ProfileScreenViewModel @Inject constructor(
                             email = it.email,
                             profileImageUrl = it.profileImageUrl,
                             bookmarksProducts = it.bookmarksProducts,
+                            cartBook = it.cartBook
                         )
                     )
             } ?: run {
