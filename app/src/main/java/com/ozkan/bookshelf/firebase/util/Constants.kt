@@ -1,11 +1,17 @@
 package com.ozkan.bookshelf.util
 
 object FirebaseStorageConstants {
-    val USER_IMAGES = "app"
+    val ROOT_DIRECTORY  = "app"
     val BOOK_IMAGES = "book"
-    val BOOK_INFOS = "bookinfo"
 }
+
 
 object FirebaseFireStoreConstants {
     const val USERS = "USERS"
+    const val BOOK = "BOOKS"
+}
+
+object FireStoreDocumentField {
+    val DATE = "date"
+    val BOOK_ID = "id"
 }

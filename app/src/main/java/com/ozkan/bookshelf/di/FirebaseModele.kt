@@ -37,18 +37,8 @@ object FirebaseModele {
     @Singleton
     @Provides
     fun provideFirebaseStroageImageofUserInstance(): StorageReference {
-        return FirebaseStorage.getInstance().getReference(FirebaseStorageConstants.USER_IMAGES)
+        return FirebaseStorage.getInstance().getReference(FirebaseStorageConstants.ROOT_DIRECTORY)
     }
 
-    @Singleton
-    @Provides
-    fun provideFirebaseStroageImageofBookInstance(): StorageReference {
-        return FirebaseStorage.getInstance().getReference(FirebaseStorageConstants.BOOK_IMAGES)
-    }
 
-    @Singleton
-    @Provides
-    fun provideFirebaseStroageInfoofBooksInstance(): StorageReference {
-        return FirebaseStorage.getInstance().getReference(FirebaseStorageConstants.BOOK_INFOS)
-    }
 }

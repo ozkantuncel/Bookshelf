@@ -44,4 +44,9 @@ interface AuthRepository {
     )
 
     fun getSession(result: (User?) -> Unit)
+
+    fun getUserInfo(
+        id: String,
+        result: (User?) -> Unit
+    )
 }

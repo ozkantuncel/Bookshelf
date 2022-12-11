@@ -60,7 +60,6 @@ import com.ozkan.bookshelf.ui.theme.Navyblue
 import com.ozkan.bookshelf.util.extension.hideKeyboard
 import com.ozkan.bookshelf.util.extension.toast
 
-
 @Composable
 fun LoginScreen(
     navController: NavController,
@@ -123,7 +122,6 @@ fun LoginScreen(
         errorTitle = errorTitle.value,
 
         )
-
 }
 
 @Composable
