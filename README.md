@@ -22,6 +22,8 @@ I made Book shop App with using `Jetpack Compose` and [Firebase][1] (Firestore, 
 ---
 App video
 
+https://user-images.githubusercontent.com/26549014/215268255-ac13443b-aad2-4f66-ab8e-e93f8fb11ef8.mp4
+
 ---
 
 ```
