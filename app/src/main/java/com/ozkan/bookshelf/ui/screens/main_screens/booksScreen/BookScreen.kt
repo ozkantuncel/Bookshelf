@@ -26,6 +26,8 @@ import androidx.navigation.NavController
 import com.ozkan.bookshelf.R
 import com.ozkan.bookshelf.firebase.dto.Book
 import com.ozkan.bookshelf.firebase.util.UiState
+import com.ozkan.bookshelf.ui.navigation.Screen
+import com.ozkan.bookshelf.ui.screens.auth_screens.login.LoginViewModel
 import com.ozkan.bookshelf.ui.screens.common.api_state.ApiLoadingState
 import com.ozkan.bookshelf.ui.screens.common.button.BKAIconButton
 import com.ozkan.bookshelf.ui.screens.main_screens.favorite_screen.FavoriteScreenViewModel
@@ -41,7 +43,8 @@ fun BookScreen(
     navController: NavController,
     homeScreenViewModel: HomeScreenViewModel = hiltViewModel(),
     favoriteScreenViewModel: FavoriteScreenViewModel = hiltViewModel(),
-    profileScreenViewModel: ProfileScreenViewModel = hiltViewModel()
+    profileScreenViewModel: ProfileScreenViewModel = hiltViewModel(),
+    loginViewModel: LoginViewModel = hiltViewModel()
 ) {
 
     val bookState = homeScreenViewModel.book.value
@@ -92,6 +95,7 @@ fun BookScreen(
         navController = navController,
         data = data,
         favoriteScreenViewModel = favoriteScreenViewModel,
+        loginViewModel = loginViewModel,
         userId = userId.value
     )
 }
@@ -101,6 +105,7 @@ fun BookPage(
     navController: NavController,
     data: List<Book>,
     favoriteScreenViewModel: FavoriteScreenViewModel,
+    loginViewModel: LoginViewModel,
     userId: String
 ) {
     Scaffold(
@@ -117,7 +122,9 @@ fun BookPage(
                         icon = R.drawable.pers_ico,
                         iconTint = Color.Gray
                     ) {
-
+                        loginViewModel.logout{
+                            navController.navigate(Screen.Login.route)
+                        }
                     }
                 }
             )
